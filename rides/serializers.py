@@ -18,7 +18,7 @@ class RideEventSerializer(serializers.ModelSerializer):
 class RideSerializer(serializers.ModelSerializer):
     id_rider = UserSerializer(read_only=True)
     id_driver = UserSerializer(read_only=True)
-    todays_ride_events = RideEventSerializer(many=True, read_only=True)
+    todays_ride_events = serializers.SerializerMethodField()
 
     class Meta:
         model = Ride
@@ -35,3 +35,7 @@ class RideSerializer(serializers.ModelSerializer):
             'todays_ride_events'
         
         ]
+
+    def get_todays_ride_events(self, obj):
+        events = getattr(obj, 'todays_ride_events', [])
+        return RideEventSerializer(events, many=True).data
