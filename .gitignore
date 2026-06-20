@@ -1,5 +1,5 @@
 # Database
-dv.sqlite3
+db.sqlite3
 
 # Python cache
 *.pyc 
