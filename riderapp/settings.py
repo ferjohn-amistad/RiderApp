@@ -144,4 +144,6 @@ AUTH_USER_MODEL = 'rides.User'
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'id_user',
     'USER_ID_CLAIM': 'user_id',
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
