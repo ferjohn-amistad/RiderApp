@@ -1,0 +1,12 @@
+# Database
+dv.sqlite3
+
+# Python cache
+*.pyc 
+__pycache__/
+
+# Virtual environment
+env/
+
+# Migrattion cache 
+migrations/__pychache__/
