@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models import Prefetch, FloatField, ExpressionWrapper, F
 from datetime import timedelta
 from django.db.models.functions import Sqrt, Power
+from rest_framework.exceptions import ValidationError
 
 from .models import Ride, RideEvent, User
 from .serializers import RideSerializer, UserSerializer
@@ -40,18 +41,24 @@ class RideViewSet(viewsets.ModelViewSet):
         lng =self.request.query_params.get('lng')
 
         if lat and lng:
-            lat = float(lat)
-            lng = float(lng)
+            try:
+                lat = float(lat)
+                lng = float(lng)
 
-            queryset = queryset.annotate(
-                distance=ExpressionWrapper(
-                    Sqrt(
-                        Power(F('pickup_latitude') - lat, 2) + 
-                        Power(F('pickup_longitude') - lng, 2)
-                    ),
-                    output_field=FloatField()
-                )
-            ).order_by('distance')
+                queryset = queryset.annotate(
+                    distance=ExpressionWrapper(
+                        Sqrt(
+                            Power(F('pickup_latitude') - lat, 2) + 
+                            Power(F('pickup_longitude') - lng, 2)
+                        ),
+                        output_field=FloatField()
+                    )
+                ).order_by('distance')
+
+            except ValueError:
+                raise ValidationError({
+                    'error': 'Invalid lat/lng values. Must be valid numbers.'
+            })
 
         return queryset
 
