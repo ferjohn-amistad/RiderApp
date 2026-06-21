@@ -42,7 +42,7 @@ class RideEvent(models.Model):
     id_ride_event = models.AutoField(primary_key=True)
     id_ride = models.ForeignKey(Ride, on_delete=models.CASCADE, related_name='ride_events')
     description = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    created_at = models.DateTimeField(db_index=True, null=True, blank=True)
     
 
     def __str__(self):
